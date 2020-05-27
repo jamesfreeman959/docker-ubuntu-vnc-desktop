@@ -1,0 +1,8 @@
+# Set session variables in our additional supervisord configurations
+sed -i -e "s|%USER%|$USER|" -e "s|%HOME%|$HOME|" /etc/supervisor/conf.d/transmission-daemon.conf
+
+# Disable IPv6 support in UFW to prevent errors at runtime
+sed -i 's/IPV6=.*/IPV6=no/g' /etc/default/ufw
+
+/firewall.sh 
+/etc/openvpn/start.sh 

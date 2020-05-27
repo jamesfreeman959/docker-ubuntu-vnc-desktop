@@ -10,8 +10,8 @@ FLAVOR ?= lxde
 # armhf or amd64
 ARCH ?= amd64
 
-# These files will be generated from teh Jinja templates (.j2 sources)
-templates = Dockerfile rootfs/etc/supervisor/conf.d/supervisord.conf
+# These files will be generated from the Jinja templates (.j2 sources)
+templates = rootfs/startup Dockerfile rootfs/etc/supervisor/conf.d/supervisord.conf 
 
 # Rebuild the container image
 build: $(templates)
@@ -51,9 +51,10 @@ extra-clean:
 
 # Run jinja2cli to parse Jinja template applying rules defined in the flavors definitions
 %: %.j2 flavors/$(FLAVOR).yml
-	docker run -v $(shell pwd):/data vikingco/jinja2cli \
+	docker run -v $(shell pwd):/data jamesfreeman959/jinja2cli \
 		-D flavor=$(FLAVOR) \
 		-D image=$(IMAGE) \
 		-D localbuild=$(LOCALBUILD) \
 		-D arch=$(ARCH) \
+		-I /data/flavors/$(FLAVOR)/rootfs \
 		$< flavors/$(FLAVOR).yml > $@ || rm $@

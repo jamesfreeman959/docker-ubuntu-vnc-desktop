@@ -72,4 +72,9 @@ fi
 PASSWORD=
 HTTP_PASSWORD=
 
+{% if mergeroot is defined and mergeroot is sameas true %}
+{#% include "/data/flavors/" + flavor + "/rootfs/startup.additions" %#}
+{% include "startup.additions" %}
+{% endif %}
+
 exec /bin/tini -- supervisord -n -c /etc/supervisor/supervisord.conf
